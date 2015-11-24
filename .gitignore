@@ -20,7 +20,7 @@
 # .idea/sqlDataSources.xml
 # .idea/dynamic.xml
 # .idea/uiDesigner.xml
-# lib/
+
 
 # Gradle:
 # .idea/gradle.xml
@@ -37,6 +37,7 @@
 
 # IntelliJ
 /out/
+lib/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -51,6 +52,7 @@ crashlytics-build.properties
 
 
 ### Maven ###
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup
