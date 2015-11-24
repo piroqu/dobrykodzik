@@ -165,6 +165,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.6</version>
+        </dependency>
+
+
         <!-- Annotation processor that raising compilation errors whenever constraint 
             annotations are incorrectly used. -->
         <dependency>
@@ -243,13 +250,13 @@
             </build>
         </profile>
 
-        <profile>
+<!--        <profile>
 
-            <!-- An optional Arquillian testing profile that executes tests
-                in your WildFly instance -->
-            <!-- This profile will start a new WildFly instance, and execute the
-                test, shutting it down when done -->
-            <!-- Run with: mvn clean test -Parq-wildfly-managed -->
+            &lt;!&ndash; An optional Arquillian testing profile that executes tests
+                in your WildFly instance &ndash;&gt;
+            &lt;!&ndash; This profile will start a new WildFly instance, and execute the
+                test, shutting it down when done &ndash;&gt;
+            &lt;!&ndash; Run with: mvn clean test -Parq-wildfly-managed &ndash;&gt;
             <id>arq-wildfly-managed</id>
             <dependencies>
                 <dependency>
@@ -261,9 +268,9 @@
         </profile>
 
         <profile>
-            <!-- An optional Arquillian testing profile that executes tests
-                in a remote WildFly instance -->
-            <!-- Run with: mvn clean test -Parq-wildfly-remote -->
+            &lt;!&ndash; An optional Arquillian testing profile that executes tests
+                in a remote WildFly instance &ndash;&gt;
+            &lt;!&ndash; Run with: mvn clean test -Parq-wildfly-remote &ndash;&gt;
             <id>arq-wildfly-remote</id>
             <dependencies>
                 <dependency>
@@ -272,7 +279,7 @@
                     <scope>test</scope>
                 </dependency>
             </dependencies>
-        </profile>
+        </profile>-->
 
         <profile>
             <!-- When built in OpenShift the 'openshift' profile will be used when 
