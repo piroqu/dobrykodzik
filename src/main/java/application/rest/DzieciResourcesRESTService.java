@@ -3,7 +3,6 @@ import application.model.Dziecko;
 import application.model.dtos.DzieckoDTO;
 import application.service.DzieckoHome;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;

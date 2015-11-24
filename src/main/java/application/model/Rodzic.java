@@ -1,6 +1,9 @@
 package application.model;
 // Generated 2015-11-23 23:39:49 by Hibernate Tools 4.0.0.Final
 
+import application.model.dtos.mobile.RodzicDTO;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,7 +11,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -22,100 +27,120 @@ import javax.persistence.TemporalType;
 @Table(name = "rodzic", catalog = "praca_schema")
 public class Rodzic implements java.io.Serializable {
 
-	private Integer rodzicId;
-	private Date creationDate;
-	private String haslo;
-	private boolean status;
-	private String email;
-	private String numerTelefonu;
-	private Set<RodzicDziecko> rodzicDzieckos = new HashSet<RodzicDziecko>(0);
+    private Integer rodzicId;
+    private Date dataUtworzenia;
+    private String haslo;
+    private String imie;
+    private boolean status;
+    private String email;
+    private String numerTelefonu;
+    private Set<RodzicDziecko> rodzicDzieckos = new HashSet<RodzicDziecko>(0);
 
-	public Rodzic() {
-	}
+    public Rodzic() {
+    }
 
-	public Rodzic(Date creationDate, String haslo, boolean status, String email, String numerTelefonu) {
-		this.creationDate = creationDate;
-		this.haslo = haslo;
-		this.status = status;
-		this.email = email;
-		this.numerTelefonu = numerTelefonu;
-	}
+    public Rodzic(RodzicDTO rodzicDTO) {
+		this.dataUtworzenia = rodzicDTO.getDataUtworzenia();
+        this.imie = rodzicDTO.getImie();
+        this.haslo = rodzicDTO.getHaslo();
+        this.status = rodzicDTO.isStatus();
+        this.email = rodzicDTO.getEmail();
+        this.numerTelefonu = rodzicDTO.getNumerTelefonu();
 
-	public Rodzic(Date creationDate, String haslo, boolean status, String email, String numerTelefonu,
-			Set<RodzicDziecko> rodzicDzieckos) {
-		this.creationDate = creationDate;
-		this.haslo = haslo;
-		this.status = status;
-		this.email = email;
-		this.numerTelefonu = numerTelefonu;
-		this.rodzicDzieckos = rodzicDzieckos;
-	}
+    }
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
+    public Rodzic(Date dataUtworzenia, String haslo, boolean status, String email, String numerTelefonu) {
+        this.dataUtworzenia = dataUtworzenia;
+        this.haslo = haslo;
+        this.status = status;
+        this.email = email;
+        this.numerTelefonu = numerTelefonu;
+    }
 
-	@Column(name = "rodzic_id", unique = true, nullable = false)
-	public Integer getRodzicId() {
-		return this.rodzicId;
-	}
+    public Rodzic(Date creationDate, String haslo, boolean status, String email, String numerTelefonu,
+                  Set<RodzicDziecko> rodzicDzieckos) {
+        this.dataUtworzenia = creationDate;
+        this.haslo = haslo;
+        this.status = status;
+        this.email = email;
+        this.numerTelefonu = numerTelefonu;
+        this.rodzicDzieckos = rodzicDzieckos;
+    }
 
-	public void setRodzicId(Integer rodzicId) {
-		this.rodzicId = rodzicId;
-	}
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "creation_date", nullable = false, length = 19)
-	public Date getCreationDate() {
-		return this.creationDate;
-	}
+    @Column(name = "rodzic_id", unique = true, nullable = false)
+    public Integer getRodzicId() {
+        return this.rodzicId;
+    }
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
+    public void setRodzicId(Integer rodzicId) {
+        this.rodzicId = rodzicId;
+    }
 
-	@Column(name = "haslo", nullable = false)
-	public String getHaslo() {
-		return this.haslo;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "data_utworzenia", nullable = false, length = 19)
+    public Date getDataUtworzenia() {
+        return this.dataUtworzenia;
+    }
 
-	public void setHaslo(String haslo) {
-		this.haslo = haslo;
-	}
+    public void setDataUtworzenia(Date creationDate) {
+        this.dataUtworzenia = creationDate;
+    }
 
-	@Column(name = "status", nullable = false)
-	public boolean isStatus() {
-		return this.status;
-	}
+    @Column(name = "haslo", nullable = false)
+    public String getHaslo() {
+        return this.haslo;
+    }
 
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
+    public void setHaslo(String haslo) {
+        this.haslo = haslo;
+    }
 
-	@Column(name = "email", nullable = false)
-	public String getEmail() {
-		return this.email;
-	}
+    @Column(name = "imie", nullable = false)
+    public String getImie() {
+        return this.imie;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setImie(String imie) {
+        this.imie = imie;
+    }
 
-	@Column(name = "numer_telefonu", nullable = false, length = 20)
-	public String getNumerTelefonu() {
-		return this.numerTelefonu;
-	}
+    @Column(name = "status", nullable = false)
+    public boolean isStatus() {
+        return this.status;
+    }
 
-	public void setNumerTelefonu(String numerTelefonu) {
-		this.numerTelefonu = numerTelefonu;
-	}
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "rodzic")
-	public Set<RodzicDziecko> getRodzicDzieckos() {
-		return this.rodzicDzieckos;
-	}
+    @Column(name = "email", nullable = false)
+    public String getEmail() {
+        return this.email;
+    }
 
-	public void setRodzicDzieckos(Set<RodzicDziecko> rodzicDzieckos) {
-		this.rodzicDzieckos = rodzicDzieckos;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Column(name = "numer_telefonu", nullable = false, length = 20)
+    public String getNumerTelefonu() {
+        return this.numerTelefonu;
+    }
+
+    public void setNumerTelefonu(String numerTelefonu) {
+        this.numerTelefonu = numerTelefonu;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "rodzic")
+    public Set<RodzicDziecko> getRodzicDzieckos() {
+        return this.rodzicDzieckos;
+    }
+
+    public void setRodzicDzieckos(Set<RodzicDziecko> rodzicDzieckos) {
+        this.rodzicDzieckos = rodzicDzieckos;
+    }
 
 }
