@@ -1,9 +1,8 @@
 package application.model;
 // Generated 2015-11-23 23:39:49 by Hibernate Tools 4.0.0.Final
 
-import application.model.dtos.mobile.RodzicDTO;
+import application.model.dtos.mobile.RodzicMDTO;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,13 +38,13 @@ public class Rodzic implements java.io.Serializable {
     public Rodzic() {
     }
 
-    public Rodzic(RodzicDTO rodzicDTO) {
-		this.dataUtworzenia = rodzicDTO.getDataUtworzenia();
-        this.imie = rodzicDTO.getImie();
-        this.haslo = rodzicDTO.getHaslo();
-        this.status = rodzicDTO.isStatus();
-        this.email = rodzicDTO.getEmail();
-        this.numerTelefonu = rodzicDTO.getNumerTelefonu();
+    public Rodzic(RodzicMDTO rodzicMDTO) {
+		this.dataUtworzenia = rodzicMDTO.getDataUtworzenia();
+        this.imie = rodzicMDTO.getImie();
+        this.haslo = rodzicMDTO.getHaslo();
+        this.status = rodzicMDTO.isStatus();
+        this.email = rodzicMDTO.getEmail();
+        this.numerTelefonu = rodzicMDTO.getNumerTelefonu();
 
     }
 

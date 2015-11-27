@@ -55,7 +55,7 @@ public class Kolejka implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "fk_typ_zadanie_zadanie_id", nullable = false)
+	@JoinColumn(name = "fk_typ_zadanie_zadanie_id")
 	public TypZadanie getTypZadanie() {
 		return this.typZadanie;
 	}
@@ -65,7 +65,7 @@ public class Kolejka implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "fk_rodzic_dziecko_rodzic_dziecko_id", nullable = false)
+	@JoinColumn(name = "fk_rodzic_dziecko_rodzic_dziecko_id")
 	public RodzicDziecko getRodzicDziecko() {
 		return this.rodzicDziecko;
 	}

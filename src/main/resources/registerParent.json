@@ -1,0 +1,19 @@
+{
+  "rodzicId": 8,
+  "imie": "Testnejm",
+  "dataUtworzenia": "2015-11-24",
+  "status": false,
+  "email": "tasdeasdqwst2stt@ma2ilpl",
+  "haslo": "1",
+  "numerTelefonu": "1234567890"
+}
+
+
+{
+  "dataUtworzenia": "2015-11-24",
+  "email": "from@android.pl",
+  "haslo": "pass",
+  "imie": "android",
+  "numerTelefonu": "1234567890",
+  "status": true
+}
