@@ -1,5 +1,8 @@
 package application.model;
-// Generated 2015-11-23 23:39:49 by Hibernate Tools 4.0.0.Final
+// Generated 2015-11-27 15:23:14 by Hibernate Tools 4.3.1.Final
+
+import application.helper.DateParser;
+import application.model.dtos.mobile.DzieckoMDTO;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -26,23 +29,33 @@ public class Dziecko implements java.io.Serializable {
 	private Date dataUtworzenia;
 	private String haslo;
 	private boolean status;
+	private String imie;
 	private Set<Pozycja> pozycjas = new HashSet<Pozycja>(0);
 	private Set<RodzicDziecko> rodzicDzieckos = new HashSet<RodzicDziecko>(0);
 
 	public Dziecko() {
 	}
 
-	public Dziecko(Date dataUtworzenia, String haslo, boolean status) {
+	public Dziecko(DzieckoMDTO dzieckoMDTO){
+		this.dataUtworzenia= DateParser.getCurrentParsedDate();
+		this.haslo= dzieckoMDTO.getHaslo();
+		this.status= dzieckoMDTO.isStatus();
+		this.imie=dzieckoMDTO.getImie();
+	}
+
+	public Dziecko(Date dataUtworzenia, String haslo, boolean status, String imie) {
 		this.dataUtworzenia = dataUtworzenia;
 		this.haslo = haslo;
 		this.status = status;
+		this.imie = imie;
 	}
 
-	public Dziecko(Date dataUtworzenia, String haslo, boolean status, Set<Pozycja> pozycjas,
+	public Dziecko(Date dataUtworzenia, String haslo, boolean status, String imie, Set<Pozycja> pozycjas,
 			Set<RodzicDziecko> rodzicDzieckos) {
 		this.dataUtworzenia = dataUtworzenia;
 		this.haslo = haslo;
 		this.status = status;
+		this.imie = imie;
 		this.pozycjas = pozycjas;
 		this.rodzicDzieckos = rodzicDzieckos;
 	}
@@ -85,6 +98,15 @@ public class Dziecko implements java.io.Serializable {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+
+	@Column(name = "imie", nullable = false)
+	public String getImie() {
+		return this.imie;
+	}
+
+	public void setImie(String imie) {
+		this.imie = imie;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dziecko")
