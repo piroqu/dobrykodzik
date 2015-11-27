@@ -1,5 +1,5 @@
 package application.model;
-// Generated 2015-11-23 23:39:49 by Hibernate Tools 4.0.0.Final
+// Generated 2015-11-27 15:23:14 by Hibernate Tools 4.3.1.Final
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -22,8 +23,8 @@ import javax.persistence.TemporalType;
 public class Kolejka implements java.io.Serializable {
 
 	private Integer kolejkaId;
-	private TypZadanie typZadanie;
 	private RodzicDziecko rodzicDziecko;
+	private TypZadanie typZadanie;
 	private int priorytet;
 	private boolean status;
 	private byte[] dane;
@@ -32,10 +33,17 @@ public class Kolejka implements java.io.Serializable {
 	public Kolejka() {
 	}
 
-	public Kolejka(TypZadanie typZadanie, RodzicDziecko rodzicDziecko, int priorytet, boolean status, byte[] dane,
+	public Kolejka(int priorytet, boolean status, byte[] dane, Date data) {
+		this.priorytet = priorytet;
+		this.status = status;
+		this.dane = dane;
+		this.data = data;
+	}
+
+	public Kolejka(RodzicDziecko rodzicDziecko, TypZadanie typZadanie, int priorytet, boolean status, byte[] dane,
 			Date data) {
-		this.typZadanie = typZadanie;
 		this.rodzicDziecko = rodzicDziecko;
+		this.typZadanie = typZadanie;
 		this.priorytet = priorytet;
 		this.status = status;
 		this.dane = dane;
@@ -55,6 +63,17 @@ public class Kolejka implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumns({ @JoinColumn(name = "rodzic_dzieckorodzicrodzic_id", referencedColumnName = "rodzicrodzic_id"),
+			@JoinColumn(name = "rodzic_dzieckodzieckodziecko_id", referencedColumnName = "dzieckodziecko_id") })
+	public RodzicDziecko getRodzicDziecko() {
+		return this.rodzicDziecko;
+	}
+
+	public void setRodzicDziecko(RodzicDziecko rodzicDziecko) {
+		this.rodzicDziecko = rodzicDziecko;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_typ_zadanie_zadanie_id")
 	public TypZadanie getTypZadanie() {
 		return this.typZadanie;
@@ -62,16 +81,6 @@ public class Kolejka implements java.io.Serializable {
 
 	public void setTypZadanie(TypZadanie typZadanie) {
 		this.typZadanie = typZadanie;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "fk_rodzic_dziecko_rodzic_dziecko_id")
-	public RodzicDziecko getRodzicDziecko() {
-		return this.rodzicDziecko;
-	}
-
-	public void setRodzicDziecko(RodzicDziecko rodzicDziecko) {
-		this.rodzicDziecko = rodzicDziecko;
 	}
 
 	@Column(name = "priorytet", nullable = false)
