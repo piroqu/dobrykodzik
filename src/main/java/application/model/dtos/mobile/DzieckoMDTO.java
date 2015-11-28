@@ -63,4 +63,15 @@ public class DzieckoMDTO implements java.io.Serializable {
     public String getImie() {
         return imie;
     }
+
+    @Override
+    public String toString() {
+        return "DzieckoMDTO{" +
+                "dzieckoId=" + dzieckoId +
+                ", dataUtworzenia='" + dataUtworzenia + '\'' +
+                ", haslo='" + haslo + '\'' +
+                ", status=" + status +
+                ", imie='" + imie + '\'' +
+                '}';
+    }
 }

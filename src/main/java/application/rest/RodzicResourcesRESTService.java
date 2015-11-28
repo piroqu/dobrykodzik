@@ -46,6 +46,14 @@ public class RodzicResourcesRESTService {
     }
 
     @POST
+    @Path("/test")
+    @Consumes("text/plain")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String test(String param){
+        return "Brawa " + param;
+    }
+
+/*    @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -63,7 +71,7 @@ public class RodzicResourcesRESTService {
             builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
         }
         return builder.build();
-    }
+    }*/
 
     public Kolejka createRegisterQueue(RodzicMDTO rodzicMDTO){
         Kolejka registerQueue = new Kolejka();

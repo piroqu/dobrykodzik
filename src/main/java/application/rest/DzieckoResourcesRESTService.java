@@ -1,9 +1,11 @@
 package application.rest;
+
 import application.model.*;
 import application.model.dtos.DzieckoDTO;
 import application.model.dtos.mobile.DzieckoMDTO;
 import application.model.dtos.mobile.PozycjaMDTO;
 import application.model.dtos.mobile.RodzicMDTO;
+import application.model.dtos.mobile.response.DzieckoMDTOR;
 import application.service.DzieckoHome;
 import application.service.PozycjaHome;
 
@@ -50,6 +52,19 @@ public class DzieckoResourcesRESTService {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    public DzieckoMDTOR register(DzieckoMDTO dzieckoMDTO) {
+        log.info("SERVER RECIEVED : " +dzieckoMDTO);
+        Dziecko dziecko = new Dziecko(dzieckoMDTO);
+        Integer generatedID = dzieckoHome.persistAndGetId(dziecko);
+        log.info("ID DZIECKO: " + String.valueOf(generatedID));
+        DzieckoMDTOR dzieckoMDTOR = new DzieckoMDTOR();
+        dzieckoMDTOR.setDzieckoId(generatedID);
+        return dzieckoMDTOR;
+    }
+/*    @POST
+    @Path("/register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response register(DzieckoMDTO dzieckoMDTO){
         Response.ResponseBuilder builder = null;
         Dziecko dziecko = new Dziecko(dzieckoMDTO);
@@ -65,20 +80,21 @@ public class DzieckoResourcesRESTService {
             builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
         }
         return builder.build();
-    }
+    }*/
 
     @POST
     @Path("/synchronize/{chilId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public List<PozycjaMDTO> synchronize(@PathParam("chilId") Integer childId,
-                            List<PozycjaMDTO> positionsToSync){
+                                         List<PozycjaMDTO> positionsToSync) {
         Dziecko currentChild = dzieckoHome.findById(childId);
-        for(PozycjaMDTO tempPozycjaMDTO : positionsToSync){
+        for (PozycjaMDTO tempPozycjaMDTO : positionsToSync) {
             log.info("Inster " + tempPozycjaMDTO);
-            Pozycja tempPozycja = new Pozycja(tempPozycjaMDTO,currentChild);
+            Pozycja tempPozycja = new Pozycja(tempPozycjaMDTO, currentChild);
             pozycjaHome.persist(tempPozycja);
             log.info("Inster " + tempPozycjaMDTO + " OK !");
+            tempPozycjaMDTO.setCzyZsynchronizowano(true);
         }
         return positionsToSync;
     }
