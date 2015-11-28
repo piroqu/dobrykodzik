@@ -2,7 +2,8 @@ package application.rest;
 
 import application.model.Kolejka;
 import application.model.Rodzic;
-import application.model.dtos.mobile.RodzicMDTO;
+import application.model.dtos.mobile.request.RodzicMDTORequest;
+import application.model.dtos.mobile.response.RodzicMDTOResponse;
 import application.service.KolejkaHome;
 import application.service.RodzicHome;
 import application.util.Serializer;
@@ -11,14 +12,8 @@ import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -49,10 +44,25 @@ public class RodzicResourcesRESTService {
     @Path("/test")
     @Consumes("text/plain")
     @Produces(MediaType.APPLICATION_JSON)
-    public String test(String param){
+    public String test(String param) {
         return "Brawa " + param;
     }
 
+    @POST
+    @Path("/register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RodzicMDTOResponse register(RodzicMDTORequest rodzicMDTORequest) {
+        log.info("Parent register recievied: " +rodzicMDTORequest);
+        Rodzic rodzic = new Rodzic(rodzicMDTORequest);
+        RodzicMDTOResponse rodzicMDTOResponse = new RodzicMDTOResponse();   //TODO add QUEUE !!
+//       Kolejka task = createRegisterQueue(rodzicMDTO);
+//        kolejkaHome.persist(task);
+        Integer rodzicId = rodzicHome.persistAndGetId(rodzic);
+        rodzicMDTOResponse.setParentId(rodzicId);
+        log.info("Parent register sends: " +rodzicMDTOResponse);
+        return rodzicMDTOResponse;
+    }
 /*    @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -73,16 +83,16 @@ public class RodzicResourcesRESTService {
         return builder.build();
     }*/
 
-    public Kolejka createRegisterQueue(RodzicMDTO rodzicMDTO){
+    public Kolejka createRegisterQueue(RodzicMDTORequest rodzicMDTORequest) {
         Kolejka registerQueue = new Kolejka();
         registerQueue.setStatus(true);
         registerQueue.setData(Calendar.getInstance().getTime());
         registerQueue.setPriorytet(0);
         byte[] rodzicAsBytes = new byte[0];
         try {
-            rodzicAsBytes = Serializer.serialize(rodzicMDTO);
+            rodzicAsBytes = Serializer.serialize(rodzicMDTORequest);
         } catch (IOException e) {
-            log.info("Unable to serialize rodzicMDTO " + rodzicMDTO.toString());
+            log.info("Unable to serialize rodzicMDTO " + rodzicMDTORequest.toString());
             e.printStackTrace();
         }
         registerQueue.setDane(rodzicAsBytes);

@@ -1,7 +1,7 @@
 package application.model;
 // Generated 2015-11-23 23:39:49 by Hibernate Tools 4.0.0.Final
 
-import application.model.dtos.mobile.RodzicMDTO;
+import application.model.dtos.mobile.request.RodzicMDTORequest;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -38,13 +38,13 @@ public class Rodzic implements java.io.Serializable {
     public Rodzic() {
     }
 
-    public Rodzic(RodzicMDTO rodzicMDTO) {
-		this.dataUtworzenia = rodzicMDTO.getDataUtworzenia();
-        this.imie = rodzicMDTO.getImie();
-        this.haslo = rodzicMDTO.getHaslo();
-        this.status = rodzicMDTO.isStatus();
-        this.email = rodzicMDTO.getEmail();
-        this.numerTelefonu = rodzicMDTO.getNumerTelefonu();
+    public Rodzic(RodzicMDTORequest rodzicMDTORequest) {
+		this.dataUtworzenia = rodzicMDTORequest.getDataUtworzenia();
+        this.imie = rodzicMDTORequest.getImie();
+        this.haslo = rodzicMDTORequest.getHaslo();
+        this.status = rodzicMDTORequest.isStatus();
+        this.email = rodzicMDTORequest.getEmail();
+        this.numerTelefonu = rodzicMDTORequest.getNumerTelefonu();
 
     }
 
@@ -115,7 +115,7 @@ public class Rodzic implements java.io.Serializable {
         this.status = status;
     }
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email",unique = true, nullable = false)
     public String getEmail() {
         return this.email;
     }

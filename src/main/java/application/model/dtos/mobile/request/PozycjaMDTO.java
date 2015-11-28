@@ -1,4 +1,4 @@
-package application.model.dtos.mobile;
+package application.model.dtos.mobile.request;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -33,6 +33,19 @@ public class RodzicHome {
 		}
 	}
 
+	public Integer persistAndGetId(Rodzic transientInstance) {
+		log.debug("persisting Rodzic instance");
+		try {
+			entityManager.persist(transientInstance);
+			log.debug("persist successful");
+			entityManager.flush();
+		} catch (RuntimeException re) {
+			log.error("persist failed", re);
+			throw re;
+		}
+		return transientInstance.getRodzicId();
+	}
+
 	public void remove(Rodzic persistentInstance) {
 		log.debug("removing Rodzic instance");
 		try {

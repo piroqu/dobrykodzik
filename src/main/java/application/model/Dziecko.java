@@ -2,7 +2,7 @@ package application.model;
 // Generated 2015-11-27 15:23:14 by Hibernate Tools 4.3.1.Final
 
 import application.helper.DateParser;
-import application.model.dtos.mobile.DzieckoMDTO;
+import application.model.dtos.mobile.request.DzieckoMDTO;
 
 import java.util.Date;
 import java.util.HashSet;

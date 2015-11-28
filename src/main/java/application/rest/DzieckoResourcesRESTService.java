@@ -1,24 +1,19 @@
 package application.rest;
 
 import application.model.*;
-import application.model.dtos.DzieckoDTO;
-import application.model.dtos.mobile.DzieckoMDTO;
-import application.model.dtos.mobile.PozycjaMDTO;
-import application.model.dtos.mobile.RodzicMDTO;
-import application.model.dtos.mobile.response.DzieckoMDTOR;
+import application.model.dtos.mobile.request.DzieckoMDTO;
+import application.model.dtos.mobile.request.PozycjaMDTO;
+import application.model.dtos.mobile.response.DzieckoMDTOResponse;
 import application.service.DzieckoHome;
 import application.service.PozycjaHome;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.validation.Validator;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * Created by PiroACC on 2015-11-24.
@@ -52,14 +47,14 @@ public class DzieckoResourcesRESTService {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public DzieckoMDTOR register(DzieckoMDTO dzieckoMDTO) {
+    public DzieckoMDTOResponse register(DzieckoMDTO dzieckoMDTO) {
         log.info("SERVER RECIEVED : " +dzieckoMDTO);
         Dziecko dziecko = new Dziecko(dzieckoMDTO);
         Integer generatedID = dzieckoHome.persistAndGetId(dziecko);
         log.info("ID DZIECKO: " + String.valueOf(generatedID));
-        DzieckoMDTOR dzieckoMDTOR = new DzieckoMDTOR();
-        dzieckoMDTOR.setDzieckoId(generatedID);
-        return dzieckoMDTOR;
+        DzieckoMDTOResponse dzieckoMDTOResponse = new DzieckoMDTOResponse();
+        dzieckoMDTOResponse.setDzieckoId(generatedID);
+        return dzieckoMDTOResponse;
     }
 /*    @POST
     @Path("/register")

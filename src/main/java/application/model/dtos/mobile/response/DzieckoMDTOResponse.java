@@ -1,6 +1,6 @@
 package application.model.dtos.mobile.response;
 
-public class DzieckoMDTOR implements java.io.Serializable {
+public class DzieckoMDTOResponse implements java.io.Serializable {
 
     private Integer dzieckoId;
 

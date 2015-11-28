@@ -2,7 +2,7 @@ package application.model;
 // Generated 2015-11-23 23:39:49 by Hibernate Tools 4.0.0.Final
 
 import application.helper.DateParser;
-import application.model.dtos.mobile.PozycjaMDTO;
+import application.model.dtos.mobile.request.PozycjaMDTO;
 
 import java.util.Date;
 import javax.persistence.Column;
