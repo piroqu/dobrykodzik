@@ -6,6 +6,8 @@ import application.model.dtos.mobile.request.PozycjaMDTO;
 import application.model.dtos.mobile.response.DzieckoMDTOResponse;
 import application.service.DzieckoHome;
 import application.service.PozycjaHome;
+import application.service.RodzicDzieckoHome;
+import application.service.RodzicHome;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -34,6 +36,12 @@ public class DzieckoResourcesRESTService {
     @Inject
     private PozycjaHome pozycjaHome;
 
+    @Inject
+    private RodzicHome rodzicHome;
+
+    @Inject
+    private RodzicDzieckoHome rodzicDzieckoHome;
+
     public DzieckoResourcesRESTService() {
     }
 
@@ -44,11 +52,34 @@ public class DzieckoResourcesRESTService {
     }
 
     @POST
+    @Path("/connect")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void connect(DzieckoMDTO dzieckoMDTO) {
+        Integer childId = dzieckoMDTO.getDzieckoId();
+        Integer parentId = 7;
+        log.info("Child-Parent connect recieved childId : " + childId + " and parentId : ");
+        Dziecko currentChild = dzieckoHome.findById(childId);
+        log.info("Child-Parent connect found child:" +currentChild);
+        Rodzic targetParent = rodzicHome.findById(parentId);
+        log.info("Child-Parent connect found parent:" +targetParent);
+        RodzicDziecko rodzicDziecko = new RodzicDziecko();
+        RodzicDzieckoId rodzicDzieckoId = new RodzicDzieckoId();
+        rodzicDzieckoId.setDzieckodzieckoId(childId);
+        rodzicDzieckoId.setRodzicrodzicId(parentId);
+        rodzicDziecko.setDziecko(currentChild);
+        rodzicDziecko.setRodzic(targetParent);
+        rodzicDziecko.setId(rodzicDzieckoId);
+        rodzicDzieckoHome.persist(rodzicDziecko);
+        log.info("Child-Parent persist : " +rodzicDziecko);
+    }
+
+    @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public DzieckoMDTOResponse register(DzieckoMDTO dzieckoMDTO) {
-        log.info("SERVER RECIEVED : " +dzieckoMDTO);
+        log.info("SERVER RECIEVED : " + dzieckoMDTO);
         Dziecko dziecko = new Dziecko(dzieckoMDTO);
         Integer generatedID = dzieckoHome.persistAndGetId(dziecko);
         log.info("ID DZIECKO: " + String.valueOf(generatedID));
