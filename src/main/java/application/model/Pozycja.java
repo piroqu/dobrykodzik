@@ -1,6 +1,9 @@
 package application.model;
 // Generated 2015-11-23 23:39:49 by Hibernate Tools 4.0.0.Final
 
+import application.helper.DateParser;
+import application.model.dtos.mobile.PozycjaMDTO;
+
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +32,15 @@ public class Pozycja implements java.io.Serializable {
 
 	public Pozycja() {
 	}
+
+	public Pozycja(PozycjaMDTO pozycjaMDTO, Dziecko dziecko) {
+		this.dziecko = dziecko;
+		this.dlugoscGeograficzna = pozycjaMDTO.getDlugoscGeograficzna();
+		this.szerokoscGeograficzna = pozycjaMDTO.getSzerokoscGeograficzna();
+//		this.czas = DateParser.parseStringToDate(pozycjaMDTO.getData());
+		this.czas = DateParser.getCurrentParsedDate();
+	}
+
 
 	public Pozycja(Dziecko dziecko, double dlugoscGeograficzna, double szerokoscGeograficzna, Date czas) {
 		this.dziecko = dziecko;

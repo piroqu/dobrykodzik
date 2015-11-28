@@ -1,13 +1,14 @@
 package application.rest;
-import application.model.Dziecko;
-import application.model.Kolejka;
-import application.model.Rodzic;
+import application.model.*;
 import application.model.dtos.DzieckoDTO;
 import application.model.dtos.mobile.DzieckoMDTO;
+import application.model.dtos.mobile.PozycjaMDTO;
 import application.model.dtos.mobile.RodzicMDTO;
 import application.service.DzieckoHome;
+import application.service.PozycjaHome;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -33,6 +34,9 @@ public class DzieckoResourcesRESTService {
     @Inject
     private DzieckoHome dzieckoHome;
 
+    @Inject
+    private PozycjaHome pozycjaHome;
+
     public DzieckoResourcesRESTService() {
     }
 
@@ -48,15 +52,34 @@ public class DzieckoResourcesRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(DzieckoMDTO dzieckoMDTO){
         Response.ResponseBuilder builder = null;
-        Dziecko rodzic = new Dziecko(dzieckoMDTO);
+        Dziecko dziecko = new Dziecko(dzieckoMDTO);
         try {
-            dzieckoHome.persist(rodzic);
-            builder= Response.ok();
+            Integer generatedID = dzieckoHome.persistAndGetId(dziecko);
+            log.info("ID DZIECKO: " +String.valueOf(generatedID));
+            Map<String, String> responseObj = new HashMap<String, String>();
+            responseObj.put("id", String.valueOf(generatedID));
+            builder = Response.status(Response.Status.OK).entity(responseObj);
         } catch (RuntimeException ex){
             Map<String, String> responseObj = new HashMap<String, String>();
             responseObj.put("error", ex.getMessage());
             builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
         }
         return builder.build();
+    }
+
+    @POST
+    @Path("/synchronize/{chilId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PozycjaMDTO> synchronize(@PathParam("chilId") Integer childId,
+                            List<PozycjaMDTO> positionsToSync){
+        Dziecko currentChild = dzieckoHome.findById(childId);
+        for(PozycjaMDTO tempPozycjaMDTO : positionsToSync){
+            log.info("Inster " + tempPozycjaMDTO);
+            Pozycja tempPozycja = new Pozycja(tempPozycjaMDTO,currentChild);
+            pozycjaHome.persist(tempPozycja);
+            log.info("Inster " + tempPozycjaMDTO + " OK !");
+        }
+        return positionsToSync;
     }
 }

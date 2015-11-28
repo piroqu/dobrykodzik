@@ -22,11 +22,25 @@ public class DzieckoHome {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	public Integer persistAndGetId(Dziecko transientInstance) {
+		log.debug("persisting Dziecko instance");
+		try {
+			entityManager.persist(transientInstance);
+			log.debug("persist successful");
+			entityManager.flush();
+		} catch (RuntimeException re) {
+			log.error("persist failed", re);
+			throw re;
+		}
+		return transientInstance.getDzieckoId();
+	}
+
 	public void persist(Dziecko transientInstance) {
 		log.debug("persisting Dziecko instance");
 		try {
 			entityManager.persist(transientInstance);
 			log.debug("persist successful");
+			entityManager.flush();
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
 			throw re;

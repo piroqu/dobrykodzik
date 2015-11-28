@@ -30,4 +30,15 @@ public class DateParser {
         }
         return date;
     }
+
+    public static Date parseStringToDate(String dateAsString){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        Date date = new Date();
+        try {
+            date = dateFormat.parse(dateFormat.format(dateAsString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 }

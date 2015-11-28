@@ -52,8 +52,8 @@ public class RodzicResourcesRESTService {
     public Response register(RodzicMDTO rodzicMDTO){
         Response.ResponseBuilder builder = null;
         Rodzic rodzic = new Rodzic(rodzicMDTO);
-        Kolejka task = createRegisterQueue(rodzicMDTO);
-        kolejkaHome.persist(task);
+ //       Kolejka task = createRegisterQueue(rodzicMDTO);
+//        kolejkaHome.persist(task);
         try {
             rodzicHome.persist(rodzic);
             builder= Response.ok();
