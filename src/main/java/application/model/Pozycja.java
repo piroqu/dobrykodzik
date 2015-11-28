@@ -37,8 +37,7 @@ public class Pozycja implements java.io.Serializable {
 		this.dziecko = dziecko;
 		this.dlugoscGeograficzna = pozycjaMDTO.getDlugoscGeograficzna();
 		this.szerokoscGeograficzna = pozycjaMDTO.getSzerokoscGeograficzna();
-//		this.czas = DateParser.parseStringToDate(pozycjaMDTO.getData());
-		this.czas = DateParser.getCurrentParsedDate();
+		this.czas = DateParser.parseStringToDate(pozycjaMDTO.getData());
 	}
 
 

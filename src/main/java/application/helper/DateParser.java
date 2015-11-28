@@ -35,7 +35,7 @@ public class DateParser {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         Date date = new Date();
         try {
-            date = dateFormat.parse(dateFormat.format(dateAsString));
+            date = dateFormat.parse(dateAsString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
