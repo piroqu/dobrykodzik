@@ -4,10 +4,16 @@ package application.service;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
+import application.model.Dziecko;
 import application.model.Pozycja;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.util.List;
 
 /**
  * Home object for domain model class Pozycja.
@@ -66,5 +72,14 @@ public class PozycjaHome {
 			log.error("get failed", re);
 			throw re;
 		}
+	}
+
+	public List<Pozycja> findByChilId(Dziecko id) {
+		log.debug("getting Pozycja instance with id: " + id);
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Pozycja> criteria = cb.createQuery(Pozycja.class);
+		Root<Pozycja> positions = criteria.from(Pozycja.class);
+		criteria.select(positions).where(cb.equal(positions.get("dziecko"), id));
+		return entityManager.createQuery(criteria).getResultList();
 	}
 }

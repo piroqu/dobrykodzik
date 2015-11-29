@@ -1,10 +1,15 @@
 package application.rest;
 
+import application.model.Dziecko;
 import application.model.Kolejka;
+import application.model.Pozycja;
 import application.model.Rodzic;
 import application.model.dtos.mobile.request.RodzicMDTORequest;
+import application.model.dtos.mobile.response.PozycjaMDTOResponse;
 import application.model.dtos.mobile.response.RodzicMDTOResponse;
+import application.service.DzieckoHome;
 import application.service.KolejkaHome;
+import application.service.PozycjaHome;
 import application.service.RodzicHome;
 import application.util.Serializer;
 
@@ -13,7 +18,9 @@ import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -33,6 +40,11 @@ public class RodzicResourcesRESTService {
     @Inject
     private KolejkaHome kolejkaHome;
 
+    @Inject
+    private PozycjaHome pozycjaHome;
+
+    @Inject
+    private DzieckoHome dzieckoHome;
 
     @GET
     @Produces("text/plain")
@@ -62,6 +74,26 @@ public class RodzicResourcesRESTService {
         rodzicMDTOResponse.setParentId(rodzicId);
         log.info("Parent register sends: " +rodzicMDTOResponse);
         return rodzicMDTOResponse;
+    }
+
+    @POST
+    @Path("/position/{childId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PozycjaMDTOResponse> getChildsPositions(@PathParam("childId") Integer childId ) {
+        List<PozycjaMDTOResponse> response = new ArrayList<>();
+        log.info("Parent get child positons for childId : " +childId);
+        Dziecko dziecko = dzieckoHome.findById(childId);
+        List<Pozycja> positions = pozycjaHome.findByChilId(dziecko);
+        for(Pozycja tmp :positions){
+            PozycjaMDTOResponse pozycjaMDTOResponse = new PozycjaMDTOResponse();
+            pozycjaMDTOResponse.setCzas(tmp.getCzas());
+            pozycjaMDTOResponse.setDlugoscGeograficzna(tmp.getDlugoscGeograficzna());
+            pozycjaMDTOResponse.setSzerokoscGeograficzna(tmp.getSzerokoscGeograficzna());
+            pozycjaMDTOResponse.setPozycjaId(tmp.getPozycjaId());
+            response.add(pozycjaMDTOResponse);
+            log.info("Found positions for childId: " + childId + pozycjaMDTOResponse);
+        }
+        return response;
     }
 /*    @POST
     @Path("/register")
