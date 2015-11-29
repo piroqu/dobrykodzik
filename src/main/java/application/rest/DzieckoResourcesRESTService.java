@@ -109,17 +109,17 @@ public class DzieckoResourcesRESTService {
     }*/
 
     @POST
-    @Path("/synchronize/{chilId}")
+    @Path("/synchronize/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PozycjaMDTO> synchronize(@PathParam("chilId") Integer childId,
-                                         List<PozycjaMDTO> positionsToSync) {
+    public List<PozycjaMDTO> synchronize(List<PozycjaMDTO> positionsToSync) {
+        Integer childId = positionsToSync.get(0).getFkDzieckoId();
         Dziecko currentChild = dzieckoHome.findById(childId);
         for (PozycjaMDTO tempPozycjaMDTO : positionsToSync) {
-            log.info("Inster " + tempPozycjaMDTO);
+            log.info("Try to insert : " + tempPozycjaMDTO);
             Pozycja tempPozycja = new Pozycja(tempPozycjaMDTO, currentChild);
             pozycjaHome.persist(tempPozycja);
-            log.info("Inster " + tempPozycjaMDTO + " OK !");
+            log.info("Inserted : " + tempPozycjaMDTO + " OK !");
             tempPozycjaMDTO.setCzyZsynchronizowano(true);
         }
         return positionsToSync;
