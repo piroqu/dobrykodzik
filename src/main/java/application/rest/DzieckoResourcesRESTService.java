@@ -1,7 +1,7 @@
 package application.rest;
 
 import application.model.*;
-import application.model.dtos.mobile.request.DzieckoMDTO;
+import application.model.dtos.mobile.request.DzieckoMDTORequest;
 import application.model.dtos.mobile.request.PozycjaMDTO;
 import application.model.dtos.mobile.response.DzieckoMDTOResponse;
 import application.service.DzieckoHome;
@@ -52,12 +52,12 @@ public class DzieckoResourcesRESTService {
     }
 
     @POST
-    @Path("/connect")
+    @Path("/connect/{parentId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void connect(DzieckoMDTO dzieckoMDTO) {
-        Integer childId = dzieckoMDTO.getDzieckoId();
-        Integer parentId = 7;
+    public void connectWithParent(DzieckoMDTORequest dzieckoMDTORequest,
+                                  @PathParam("parentId") Integer parentId) {
+        Integer childId = dzieckoMDTORequest.getDzieckoId();
         log.info("Child-Parent connect recieved childId : " + childId + " and parentId : ");
         Dziecko currentChild = dzieckoHome.findById(childId);
         log.info("Child-Parent connect found child:" +currentChild);
@@ -78,9 +78,9 @@ public class DzieckoResourcesRESTService {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public DzieckoMDTOResponse register(DzieckoMDTO dzieckoMDTO) {
-        log.info("SERVER RECIEVED : " + dzieckoMDTO);
-        Dziecko dziecko = new Dziecko(dzieckoMDTO);
+    public DzieckoMDTOResponse register(DzieckoMDTORequest dzieckoMDTORequest) {
+        log.info("SERVER RECIEVED : " + dzieckoMDTORequest);
+        Dziecko dziecko = new Dziecko(dzieckoMDTORequest);
         Integer generatedID = dzieckoHome.persistAndGetId(dziecko);
         log.info("ID DZIECKO: " + String.valueOf(generatedID));
         DzieckoMDTOResponse dzieckoMDTOResponse = new DzieckoMDTOResponse();

@@ -2,7 +2,7 @@ package application.model;
 // Generated 2015-11-27 15:23:14 by Hibernate Tools 4.3.1.Final
 
 import application.helper.DateParser;
-import application.model.dtos.mobile.request.DzieckoMDTO;
+import application.model.dtos.mobile.request.DzieckoMDTORequest;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -36,11 +36,11 @@ public class Dziecko implements java.io.Serializable {
 	public Dziecko() {
 	}
 
-	public Dziecko(DzieckoMDTO dzieckoMDTO){
+	public Dziecko(DzieckoMDTORequest dzieckoMDTORequest){
 		this.dataUtworzenia= DateParser.getCurrentParsedDate();
-		this.haslo= dzieckoMDTO.getHaslo();
-		this.status= dzieckoMDTO.isStatus();
-		this.imie=dzieckoMDTO.getImie();
+		this.haslo= dzieckoMDTORequest.getHaslo();
+		this.status= dzieckoMDTORequest.isStatus();
+		this.imie= dzieckoMDTORequest.getImie();
 	}
 
 	public Dziecko(Date dataUtworzenia, String haslo, boolean status, String imie) {
