@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * Created by PiroACC on 2015-11-24.
  */
 @Path("/parent")
-public class RodzicResourcesRESTService {
+public class ParentResourcesRESTService {
     @Inject
     private Logger log;
 

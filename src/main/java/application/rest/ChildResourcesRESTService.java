@@ -20,7 +20,7 @@ import javax.ws.rs.core.MediaType;
  */
 // The Java class will be hosted at the URI path "/helloworld"
 @Path("/child")
-public class DzieckoResourcesRESTService {
+public class ChildResourcesRESTService {
 
     @Inject
     private Logger log;
@@ -44,7 +44,7 @@ public class DzieckoResourcesRESTService {
     @Inject
     private KolejkaHome kolejkaHome;
 
-    public DzieckoResourcesRESTService() {
+    public ChildResourcesRESTService() {
     }
 
     @GET

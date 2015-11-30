@@ -1,29 +1,27 @@
 package application.service;
-// Generated 2015-11-30 11:50:25 by Hibernate Tools 4.3.1.Final
+// Generated 2015-11-30 22:06:01 by Hibernate Tools 4.3.1.Final
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import application.model.TypZadanie;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Home object for domain model class TypZadanie.
- * @see hibernate.model.dao.TypZadanie
+ * Home object for domain model class Parent.
+ * @see hibernate.model.dao.Parent
  * @author Hibernate Tools
  */
 @Stateless
-public class TypZadanieHome {
+public class ParentHome {
 
-	private static final Log log = LogFactory.getLog(TypZadanieHome.class);
+	private static final Log log = LogFactory.getLog(ParentHome.class);
 
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public void persist(TypZadanie transientInstance) {
-		log.debug("persisting TypZadanie instance");
+	public void persist(Parent transientInstance) {
+		log.debug("persisting Parent instance");
 		try {
 			entityManager.persist(transientInstance);
 			log.debug("persist successful");
@@ -33,8 +31,8 @@ public class TypZadanieHome {
 		}
 	}
 
-	public void remove(TypZadanie persistentInstance) {
-		log.debug("removing TypZadanie instance");
+	public void remove(Parent persistentInstance) {
+		log.debug("removing Parent instance");
 		try {
 			entityManager.remove(persistentInstance);
 			log.debug("remove successful");
@@ -44,10 +42,10 @@ public class TypZadanieHome {
 		}
 	}
 
-	public TypZadanie merge(TypZadanie detachedInstance) {
-		log.debug("merging TypZadanie instance");
+	public Parent merge(Parent detachedInstance) {
+		log.debug("merging Parent instance");
 		try {
-			TypZadanie result = entityManager.merge(detachedInstance);
+			Parent result = entityManager.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -56,10 +54,10 @@ public class TypZadanieHome {
 		}
 	}
 
-	public TypZadanie findById(Integer id) {
-		log.debug("getting TypZadanie instance with id: " + id);
+	public Parent findById(Integer id) {
+		log.debug("getting Parent instance with id: " + id);
 		try {
-			TypZadanie instance = entityManager.find(TypZadanie.class, id);
+			Parent instance = entityManager.find(Parent.class, id);
 			log.debug("get successful");
 			return instance;
 		} catch (RuntimeException re) {
