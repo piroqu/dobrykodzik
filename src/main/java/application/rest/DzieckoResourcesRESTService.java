@@ -1,13 +1,11 @@
 package application.rest;
 
+import application.helper.DateParser;
 import application.model.*;
 import application.model.dtos.mobile.request.DzieckoMDTORequest;
 import application.model.dtos.mobile.request.PozycjaMDTO;
 import application.model.dtos.mobile.response.DzieckoMDTOResponse;
-import application.service.DzieckoHome;
-import application.service.PozycjaHome;
-import application.service.RodzicDzieckoHome;
-import application.service.RodzicHome;
+import application.service.*;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -39,8 +37,12 @@ public class DzieckoResourcesRESTService {
     @Inject
     private RodzicHome rodzicHome;
 
+
     @Inject
-    private RodzicDzieckoHome rodzicDzieckoHome;
+    private TypZadanieHome typZadanieHome;
+
+    @Inject
+    private KolejkaHome kolejkaHome;
 
     public DzieckoResourcesRESTService() {
     }
@@ -60,18 +62,24 @@ public class DzieckoResourcesRESTService {
         Integer childId = dzieckoMDTORequest.getDzieckoId();
         log.info("Child-Parent connect recieved childId : " + childId + " and parentId : ");
         Dziecko currentChild = dzieckoHome.findById(childId);
-        log.info("Child-Parent connect found child:" +currentChild);
+        log.info("Child-Parent connect found child:" + currentChild);
         Rodzic targetParent = rodzicHome.findById(parentId);
-        log.info("Child-Parent connect found parent:" +targetParent);
-        RodzicDziecko rodzicDziecko = new RodzicDziecko();
-        RodzicDzieckoId rodzicDzieckoId = new RodzicDzieckoId();
-        rodzicDzieckoId.setDzieckodzieckoId(childId);
-        rodzicDzieckoId.setRodzicrodzicId(parentId);
-        rodzicDziecko.setDziecko(currentChild);
-        rodzicDziecko.setRodzic(targetParent);
-        rodzicDziecko.setId(rodzicDzieckoId);
-        rodzicDzieckoHome.persist(rodzicDziecko);
-        log.info("Child-Parent persist : " +rodzicDziecko);
+        log.info("Child-Parent connect found parent:" + targetParent);
+        Kolejka taskQueue = createTaskAskParentToConnection(targetParent,currentChild);
+        kolejkaHome.persist(taskQueue);
+        log.info("Child connect with parent task added : " +taskQueue);
+    }
+
+    public Kolejka createTaskAskParentToConnection(Rodzic rodzic,Dziecko child) {
+        Kolejka taskQueue = new Kolejka();
+        Integer dodajDzieckoTaskId = 1;
+        TypZadanie typZadanie = typZadanieHome.findById(dodajDzieckoTaskId);
+        taskQueue.setTypZadanie(typZadanie);
+        taskQueue.setStatus(true);
+        taskQueue.setData(DateParser.getCurrentParsedDate());
+        taskQueue.setRodzic(rodzic);
+        taskQueue.setDziecko(child);
+        return taskQueue;
     }
 
     @POST

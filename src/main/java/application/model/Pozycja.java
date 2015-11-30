@@ -1,5 +1,5 @@
 package application.model;
-// Generated 2015-11-23 23:39:49 by Hibernate Tools 4.0.0.Final
+// Generated 2015-11-30 11:42:17 by Hibernate Tools 4.3.1.Final
 
 import application.helper.DateParser;
 import application.model.dtos.mobile.request.PozycjaMDTO;
@@ -40,7 +40,6 @@ public class Pozycja implements java.io.Serializable {
 		this.czas = DateParser.parseStringToDate(pozycjaMDTO.getData());
 	}
 
-
 	public Pozycja(Dziecko dziecko, double dlugoscGeograficzna, double szerokoscGeograficzna, Date czas) {
 		this.dziecko = dziecko;
 		this.dlugoscGeograficzna = dlugoscGeograficzna;
@@ -61,7 +60,7 @@ public class Pozycja implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "fk_dziecko_dziecko_id", nullable = false)
+	@JoinColumn(name = "dzieckodziecko_id", nullable = false)
 	public Dziecko getDziecko() {
 		return this.dziecko;
 	}

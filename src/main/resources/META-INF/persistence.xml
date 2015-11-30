@@ -6,7 +6,6 @@
         <class>application.model.Kolejka</class>
         <class>application.model.Pozycja</class>
         <class>application.model.Rodzic</class>
-        <class>application.model.RodzicDziecko</class>
         <class>application.model.TypZadanie</class>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="validate"/>

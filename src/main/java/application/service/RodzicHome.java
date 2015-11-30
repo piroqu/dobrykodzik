@@ -1,5 +1,5 @@
 package application.service;
-// Generated 2015-11-24 00:08:03 by Hibernate Tools 4.0.0.Final
+// Generated 2015-11-30 11:50:25 by Hibernate Tools 4.3.1.Final
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -11,7 +11,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Home object for domain model class Rodzic.
- * @see hibernate.Rodzic
+ * @see hibernate.model.dao.Rodzic
  * @author Hibernate Tools
  */
 @Stateless
@@ -45,6 +45,7 @@ public class RodzicHome {
 		}
 		return transientInstance.getRodzicId();
 	}
+
 
 	public void remove(Rodzic persistentInstance) {
 		log.debug("removing Rodzic instance");

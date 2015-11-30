@@ -1,5 +1,5 @@
 package application.service;
-// Generated 2015-11-24 00:08:03 by Hibernate Tools 4.0.0.Final
+// Generated 2015-11-30 11:50:25 by Hibernate Tools 4.3.1.Final
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -11,7 +11,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Home object for domain model class Dziecko.
- * @see hibernate.Dziecko
+ * @see hibernate.model.dao.Dziecko
  * @author Hibernate Tools
  */
 @Stateless
@@ -21,6 +21,17 @@ public class DzieckoHome {
 
 	@PersistenceContext
 	private EntityManager entityManager;
+
+	public void persist(Dziecko transientInstance) {
+		log.debug("persisting Dziecko instance");
+		try {
+			entityManager.persist(transientInstance);
+			log.debug("persist successful");
+		} catch (RuntimeException re) {
+			log.error("persist failed", re);
+			throw re;
+		}
+	}
 
 	public Integer persistAndGetId(Dziecko transientInstance) {
 		log.debug("persisting Dziecko instance");
@@ -33,18 +44,6 @@ public class DzieckoHome {
 			throw re;
 		}
 		return transientInstance.getDzieckoId();
-	}
-
-	public void persist(Dziecko transientInstance) {
-		log.debug("persisting Dziecko instance");
-		try {
-			entityManager.persist(transientInstance);
-			log.debug("persist successful");
-			entityManager.flush();
-		} catch (RuntimeException re) {
-			log.error("persist failed", re);
-			throw re;
-		}
 	}
 
 	public void remove(Dziecko persistentInstance) {

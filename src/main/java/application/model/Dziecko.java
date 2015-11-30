@@ -1,5 +1,5 @@
 package application.model;
-// Generated 2015-11-27 15:23:14 by Hibernate Tools 4.3.1.Final
+// Generated 2015-11-30 11:42:17 by Hibernate Tools 4.3.1.Final
 
 import application.helper.DateParser;
 import application.model.dtos.mobile.request.DzieckoMDTORequest;
@@ -13,6 +13,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -31,7 +34,8 @@ public class Dziecko implements java.io.Serializable {
 	private boolean status;
 	private String imie;
 	private Set<Pozycja> pozycjas = new HashSet<Pozycja>(0);
-	private Set<RodzicDziecko> rodzicDzieckos = new HashSet<RodzicDziecko>(0);
+	private Set<Kolejka> kolejkas = new HashSet<Kolejka>(0);
+	private Set<Rodzic> rodzics = new HashSet<Rodzic>(0);
 
 	public Dziecko() {
 	}
@@ -51,13 +55,14 @@ public class Dziecko implements java.io.Serializable {
 	}
 
 	public Dziecko(Date dataUtworzenia, String haslo, boolean status, String imie, Set<Pozycja> pozycjas,
-			Set<RodzicDziecko> rodzicDzieckos) {
+			Set<Kolejka> kolejkas, Set<Rodzic> rodzics) {
 		this.dataUtworzenia = dataUtworzenia;
 		this.haslo = haslo;
 		this.status = status;
 		this.imie = imie;
 		this.pozycjas = pozycjas;
-		this.rodzicDzieckos = rodzicDzieckos;
+		this.kolejkas = kolejkas;
+		this.rodzics = rodzics;
 	}
 
 	@Id
@@ -119,12 +124,24 @@ public class Dziecko implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dziecko")
-	public Set<RodzicDziecko> getRodzicDzieckos() {
-		return this.rodzicDzieckos;
+	public Set<Kolejka> getKolejkas() {
+		return this.kolejkas;
 	}
 
-	public void setRodzicDzieckos(Set<RodzicDziecko> rodzicDzieckos) {
-		this.rodzicDzieckos = rodzicDzieckos;
+	public void setKolejkas(Set<Kolejka> kolejkas) {
+		this.kolejkas = kolejkas;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "rodzic_dziecko", catalog = "praca_schema", joinColumns = {
+			@JoinColumn(name = "dzieckodziecko_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "rodzicrodzic_id", nullable = false, updatable = false) })
+	public Set<Rodzic> getRodzics() {
+		return this.rodzics;
+	}
+
+	public void setRodzics(Set<Rodzic> rodzics) {
+		this.rodzics = rodzics;
 	}
 
 }

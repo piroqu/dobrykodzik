@@ -1,5 +1,5 @@
 package application.service;
-// Generated 2015-11-24 00:08:03 by Hibernate Tools 4.0.0.Final
+// Generated 2015-11-30 11:50:25 by Hibernate Tools 4.3.1.Final
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * Home object for domain model class Pozycja.
- * @see hibernate.Pozycja
+ * @see hibernate.model.dao.Pozycja
  * @author Hibernate Tools
  */
 @Stateless

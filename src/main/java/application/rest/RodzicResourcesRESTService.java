@@ -1,10 +1,8 @@
 package application.rest;
 
-import application.model.Dziecko;
-import application.model.Kolejka;
-import application.model.Pozycja;
-import application.model.Rodzic;
+import application.model.*;
 import application.model.dtos.mobile.request.RodzicMDTORequest;
+import application.model.dtos.mobile.response.KolejkaRodzicMDTOResponse;
 import application.model.dtos.mobile.response.PozycjaMDTOResponse;
 import application.model.dtos.mobile.response.RodzicMDTOResponse;
 import application.service.DzieckoHome;
@@ -65,26 +63,26 @@ public class RodzicResourcesRESTService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public RodzicMDTOResponse register(RodzicMDTORequest rodzicMDTORequest) {
-        log.info("Parent register recievied: " +rodzicMDTORequest);
+        log.info("Parent register recievied: " + rodzicMDTORequest);
         Rodzic rodzic = new Rodzic(rodzicMDTORequest);
         RodzicMDTOResponse rodzicMDTOResponse = new RodzicMDTOResponse();   //TODO add QUEUE !!
 //       Kolejka task = createRegisterQueue(rodzicMDTO);
 //        kolejkaHome.persist(task);
         Integer rodzicId = rodzicHome.persistAndGetId(rodzic);
         rodzicMDTOResponse.setParentId(rodzicId);
-        log.info("Parent register sends: " +rodzicMDTOResponse);
+        log.info("Parent register sends: " + rodzicMDTOResponse);
         return rodzicMDTOResponse;
     }
 
     @POST
     @Path("/position/{childId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PozycjaMDTOResponse> getChildsPositions(@PathParam("childId") Integer childId ) {
+    public List<PozycjaMDTOResponse> getChildsPositions(@PathParam("childId") Integer childId) {
         List<PozycjaMDTOResponse> response = new ArrayList<>();
-        log.info("Parent get child positons for childId : " +childId);
+        log.info("Parent get child positons for childId : " + childId);
         Dziecko dziecko = dzieckoHome.findById(childId);
         List<Pozycja> positions = pozycjaHome.findByChilId(dziecko);
-        for(Pozycja tmp :positions){
+        for (Pozycja tmp : positions) {
             PozycjaMDTOResponse pozycjaMDTOResponse = new PozycjaMDTOResponse();
             pozycjaMDTOResponse.setCzas(tmp.getCzas());
             pozycjaMDTOResponse.setDlugoscGeograficzna(tmp.getDlugoscGeograficzna());
@@ -95,39 +93,22 @@ public class RodzicResourcesRESTService {
         }
         return response;
     }
-/*    @POST
-    @Path("/register")
+
+    @POST
+    @Path("/queue/check")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(RodzicMDTO rodzicMDTO){
-        Response.ResponseBuilder builder = null;
-        Rodzic rodzic = new Rodzic(rodzicMDTO);
- //       Kolejka task = createRegisterQueue(rodzicMDTO);
-//        kolejkaHome.persist(task);
-        try {
-            rodzicHome.persist(rodzic);
-            builder= Response.ok();
-        } catch (RuntimeException ex){
-            Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("error", ex.getMessage());
-            builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
+    public List<KolejkaRodzicMDTOResponse> getConnectionRequests(RodzicMDTORequest rodzicMDTORequest) {
+        Integer parentId = rodzicMDTORequest.getRodzicId();
+        Rodzic currentRodzic = rodzicHome.findById(parentId);
+        List<Kolejka> parentsConnectionRequests = kolejkaHome.findByParentAndWithStatusActivte(currentRodzic);
+        List<KolejkaRodzicMDTOResponse> reponse = new ArrayList<>();
+        for (Kolejka tmp : parentsConnectionRequests) {
+            KolejkaRodzicMDTOResponse tempResponse = new KolejkaRodzicMDTOResponse(tmp);
+            reponse.add(tempResponse);
+            tmp.setStatus(false);
+            kolejkaHome.merge(tmp);
         }
-        return builder.build();
-    }*/
-
-    public Kolejka createRegisterQueue(RodzicMDTORequest rodzicMDTORequest) {
-        Kolejka registerQueue = new Kolejka();
-        registerQueue.setStatus(true);
-        registerQueue.setData(Calendar.getInstance().getTime());
-        registerQueue.setPriorytet(0);
-        byte[] rodzicAsBytes = new byte[0];
-        try {
-            rodzicAsBytes = Serializer.serialize(rodzicMDTORequest);
-        } catch (IOException e) {
-            log.info("Unable to serialize rodzicMDTO " + rodzicMDTORequest.toString());
-            e.printStackTrace();
-        }
-        registerQueue.setDane(rodzicAsBytes);
-        return registerQueue;
+        return reponse;
     }
 }
