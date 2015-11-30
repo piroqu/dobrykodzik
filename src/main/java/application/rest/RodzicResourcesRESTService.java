@@ -15,10 +15,9 @@ import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -56,6 +55,27 @@ public class RodzicResourcesRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public String test(String param) {
         return "Brawa " + param;
+    }
+
+
+    @GET
+    @Path("/login/{parentEmail}/{parentPassword}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RodzicMDTORequest getParentData(@PathParam("parentEmail") String parentEmail, @PathParam("parentPassword") String parentPassword){
+        Rodzic parent = null;
+        RodzicMDTORequest rodzicMDTOResponse=null;
+        try {
+            parent  = rodzicHome.findByEmail(parentEmail);
+        }catch (RuntimeException re) {
+            log.info("PARENT NOT FOUND");
+        }
+        if(parent.getHaslo().equals(parentPassword)) {
+            rodzicMDTOResponse = new RodzicMDTORequest(parent);
+            return rodzicMDTOResponse;
+        }else{
+            log.info("INCORRECT PASSWORD");
+        }
+        return rodzicMDTOResponse;
     }
 
     @POST

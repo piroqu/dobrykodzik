@@ -4,6 +4,9 @@ package application.service;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import application.model.Rodzic;
 import org.apache.commons.logging.Log;
@@ -81,4 +84,20 @@ public class RodzicHome {
 			throw re;
 		}
 	}
+	public Rodzic findByEmail(String email) {
+		log.debug("getting Rodzic instance with email: " + email);
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Rodzic> criteria = cb.createQuery(Rodzic.class);
+		Root<Rodzic> member = criteria.from(Rodzic.class);
+		try {
+			criteria.select(member).where(cb.equal(member.get("email"), email));
+			Rodzic instance =entityManager.createQuery(criteria).getSingleResult();
+			log.debug("get successful");
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+
 }
