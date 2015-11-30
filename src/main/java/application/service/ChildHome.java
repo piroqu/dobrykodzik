@@ -4,6 +4,8 @@ package application.service;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import application.model.Child;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -29,6 +31,19 @@ public class ChildHome {
 			log.error("persist failed", re);
 			throw re;
 		}
+	}
+
+	public Integer persistAndGetId(Child transientInstance) {
+		log.debug("persisting Dziecko instance");
+		try {
+			entityManager.persist(transientInstance);
+			log.debug("persist successful");
+			entityManager.flush();
+		} catch (RuntimeException re) {
+			log.error("persist failed", re);
+			throw re;
+		}
+		return transientInstance.getChildId();
 	}
 
 	public void remove(Child persistentInstance) {

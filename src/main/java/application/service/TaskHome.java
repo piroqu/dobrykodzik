@@ -4,6 +4,8 @@ package application.service;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import application.model.Task;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

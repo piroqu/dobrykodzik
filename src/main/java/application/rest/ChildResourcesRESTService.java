@@ -29,20 +29,20 @@ public class ChildResourcesRESTService {
     private Validator validator;
 
     @Inject
-    private DzieckoHome dzieckoHome;
+    private ChildHome childHome;
 
     @Inject
-    private PozycjaHome pozycjaHome;
+    private PositionHome positionHome;
 
     @Inject
-    private RodzicHome rodzicHome;
+    private ParentHome parentHome;
 
 
     @Inject
-    private TypZadanieHome typZadanieHome;
+    private Task taskHome;
 
     @Inject
-    private KolejkaHome kolejkaHome;
+    private Queue queueHome;
 
     public ChildResourcesRESTService() {
     }
@@ -53,7 +53,7 @@ public class ChildResourcesRESTService {
         return "Hello World";
     }
 
-    @POST
+/*    @POST
     @Path("/connect/{parentId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,26 +61,26 @@ public class ChildResourcesRESTService {
                                   @PathParam("parentId") Integer parentId) {
         Integer childId = dzieckoMDTORequest.getDzieckoId();
         log.info("Child-Parent connect recieved childId : " + childId + " and parentId : ");
-        Dziecko currentChild = dzieckoHome.findById(childId);
+        Child currentChild = childHome.findById(childId);
         log.info("Child-Parent connect found child:" + currentChild);
-        Rodzic targetParent = rodzicHome.findById(parentId);
+        Parent targetParent = parentHome.findById(parentId);
         log.info("Child-Parent connect found parent:" + targetParent);
-        Kolejka taskQueue = createTaskAskParentToConnection(targetParent,currentChild);
-        kolejkaHome.persist(taskQueue);
+        Queue taskQueue = createTaskAskParentToConnection(targetParent,currentChild);
+        queueHome.persist(taskQueue);
         log.info("Child connect with parent task added : " +taskQueue);
-    }
+    }*/
 
-    public Kolejka createTaskAskParentToConnection(Rodzic rodzic,Dziecko child) {
+  /*  public Kolejka createTaskAskParentToConnection(Rodzic rodzic,Dziecko child) {
         Kolejka taskQueue = new Kolejka();
         Integer dodajDzieckoTaskId = 1;
-        TypZadanie typZadanie = typZadanieHome.findById(dodajDzieckoTaskId);
+        TypZadanie typZadanie = taskHome.findById(dodajDzieckoTaskId);
         taskQueue.setTypZadanie(typZadanie);
         taskQueue.setStatus(true);
         taskQueue.setData(DateParser.getCurrentParsedDate());
         taskQueue.setRodzic(rodzic);
         taskQueue.setDziecko(child);
         return taskQueue;
-    }
+    }*/
 
     @POST
     @Path("/register")
@@ -88,8 +88,8 @@ public class ChildResourcesRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public DzieckoMDTOResponse register(DzieckoMDTORequest dzieckoMDTORequest) {
         log.info("SERVER RECIEVED : " + dzieckoMDTORequest);
-        Dziecko dziecko = new Dziecko(dzieckoMDTORequest);
-        Integer generatedID = dzieckoHome.persistAndGetId(dziecko);
+        Child child = new Child(dzieckoMDTORequest);
+        Integer generatedID = childHome.persistAndGetId(child);
         log.info("ID DZIECKO: " + String.valueOf(generatedID));
         DzieckoMDTOResponse dzieckoMDTOResponse = new DzieckoMDTOResponse();
         dzieckoMDTOResponse.setDzieckoId(generatedID);
@@ -122,11 +122,11 @@ public class ChildResourcesRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public List<PozycjaMDTO> synchronize(List<PozycjaMDTO> positionsToSync) {
         Integer childId = positionsToSync.get(0).getFkDzieckoId();
-        Dziecko currentChild = dzieckoHome.findById(childId);
+        Child currentChild = childHome.findById(childId);
         for (PozycjaMDTO tempPozycjaMDTO : positionsToSync) {
             log.info("Try to insert : " + tempPozycjaMDTO);
-            Pozycja tempPozycja = new Pozycja(tempPozycjaMDTO, currentChild);
-            pozycjaHome.persist(tempPozycja);
+            Position tempPozycja = new Position(tempPozycjaMDTO, currentChild);
+            positionHome.persist(tempPozycja);
             log.info("Inserted : " + tempPozycjaMDTO + " OK !");
             tempPozycjaMDTO.setCzyZsynchronizowano(true);
         }

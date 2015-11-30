@@ -1,28 +1,26 @@
 package application.rest;
 
-import application.model.*;
+import application.model.Parent;
 import application.model.dtos.mobile.request.RodzicMDTORequest;
 import application.model.dtos.mobile.response.KolejkaRodzicMDTOResponse;
 import application.model.dtos.mobile.response.PozycjaMDTOResponse;
 import application.model.dtos.mobile.response.RodzicMDTOResponse;
+import application.service.ChildHome;
 import application.service.DzieckoHome;
 import application.service.KolejkaHome;
+import application.service.ParentHome;
+import application.service.PositionHome;
 import application.service.PozycjaHome;
+import application.service.QueueHome;
 import application.service.RodzicHome;
-import application.util.Serializer;
 
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
-/**
- * Created by PiroACC on 2015-11-24.
- */
 @Path("/parent")
 public class ParentResourcesRESTService {
     @Inject
@@ -32,16 +30,16 @@ public class ParentResourcesRESTService {
     private Validator validator;
 
     @Inject
-    private RodzicHome rodzicHome;
+    private ParentHome parentHome;
 
     @Inject
-    private KolejkaHome kolejkaHome;
+    private QueueHome queueHome;
 
     @Inject
-    private PozycjaHome pozycjaHome;
+    private PositionHome positionHome;
 
     @Inject
-    private DzieckoHome dzieckoHome;
+    private ChildHome childHome;
 
     @GET
     @Produces("text/plain")
@@ -62,10 +60,10 @@ public class ParentResourcesRESTService {
     @Path("/login/{parentEmail}/{parentPassword}")
     @Produces(MediaType.APPLICATION_JSON)
     public RodzicMDTORequest getParentData(@PathParam("parentEmail") String parentEmail, @PathParam("parentPassword") String parentPassword){
-        Rodzic parent = null;
+        Parent parent = null;
         RodzicMDTORequest rodzicMDTOResponse=null;
         try {
-            parent  = rodzicHome.findByEmail(parentEmail);
+            parent  = parentHome.findByEmail(parentEmail);
         }catch (RuntimeException re) {
             log.info("PARENT NOT FOUND");
         }
@@ -87,8 +85,8 @@ public class ParentResourcesRESTService {
         Rodzic rodzic = new Rodzic(rodzicMDTORequest);
         RodzicMDTOResponse rodzicMDTOResponse = new RodzicMDTOResponse();   //TODO add QUEUE !!
 //       Kolejka task = createRegisterQueue(rodzicMDTO);
-//        kolejkaHome.persist(task);
-        Integer rodzicId = rodzicHome.persistAndGetId(rodzic);
+//        queueHome.persist(task);
+        Integer rodzicId = parentHome.persistAndGetId(rodzic);
         rodzicMDTOResponse.setParentId(rodzicId);
         log.info("Parent register sends: " + rodzicMDTOResponse);
         return rodzicMDTOResponse;
@@ -101,7 +99,7 @@ public class ParentResourcesRESTService {
         List<PozycjaMDTOResponse> response = new ArrayList<>();
         log.info("Parent get child positons for childId : " + childId);
         Dziecko dziecko = dzieckoHome.findById(childId);
-        List<Pozycja> positions = pozycjaHome.findByChilId(dziecko);
+        List<Pozycja> positions = positionHome.findByChilId(dziecko);
         for (Pozycja tmp : positions) {
             PozycjaMDTOResponse pozycjaMDTOResponse = new PozycjaMDTOResponse();
             pozycjaMDTOResponse.setCzas(tmp.getCzas());
@@ -120,14 +118,14 @@ public class ParentResourcesRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public List<KolejkaRodzicMDTOResponse> getConnectionRequests(RodzicMDTORequest rodzicMDTORequest) {
         Integer parentId = rodzicMDTORequest.getRodzicId();
-        Rodzic currentRodzic = rodzicHome.findById(parentId);
-        List<Kolejka> parentsConnectionRequests = kolejkaHome.findByParentAndWithStatusActivte(currentRodzic);
+        Rodzic currentRodzic = parentHome.findById(parentId);
+        List<Kolejka> parentsConnectionRequests = queueHome.findByParentAndWithStatusActivte(currentRodzic);
         List<KolejkaRodzicMDTOResponse> reponse = new ArrayList<>();
         for (Kolejka tmp : parentsConnectionRequests) {
             KolejkaRodzicMDTOResponse tempResponse = new KolejkaRodzicMDTOResponse(tmp);
             reponse.add(tempResponse);
             tmp.setStatus(false);
-            kolejkaHome.merge(tmp);
+            queueHome.merge(tmp);
         }
         return reponse;
     }
