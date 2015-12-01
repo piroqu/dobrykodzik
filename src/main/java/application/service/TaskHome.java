@@ -1,5 +1,5 @@
 package application.service;
-// Generated 2015-11-30 22:06:01 by Hibernate Tools 4.3.1.Final
+// Generated 2015-11-30 22:31:17 by Hibernate Tools 4.3.1.Final
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

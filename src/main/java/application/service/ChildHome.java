@@ -4,8 +4,12 @@ package application.service;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import application.model.Child;
+import application.model.Parent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -73,6 +77,22 @@ public class ChildHome {
 		log.debug("getting Child instance with id: " + id);
 		try {
 			Child instance = entityManager.find(Child.class, id);
+			log.debug("get successful");
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+
+	public Child findByEmail(String email) {
+		log.debug("getting Child instance with email: " + email);
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Child> criteria = cb.createQuery(Child.class);
+		Root<Child> member = criteria.from(Child.class);
+		try {
+			criteria.select(member).where(cb.equal(member.get("email"), email));
+			Child instance =entityManager.createQuery(criteria).getSingleResult();
 			log.debug("get successful");
 			return instance;
 		} catch (RuntimeException re) {

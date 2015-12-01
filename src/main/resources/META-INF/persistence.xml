@@ -2,11 +2,11 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <persistence-unit name="PracaEJB">
         <jta-data-source>java:/MySqlDS</jta-data-source>
-        <class>application.model.Dziecko</class>
-        <class>application.model.Kolejka</class>
-        <class>application.model.Pozycja</class>
-        <class>application.model.Rodzic</class>
-        <class>application.model.TypZadanie</class>
+        <class>application.model.Parent</class>
+        <class>application.model.Queue</class>
+        <class>application.model.Position</class>
+        <class>application.model.Child</class>
+        <class>application.model.Task</class>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/praca_schema"/>

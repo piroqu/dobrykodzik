@@ -1,6 +1,6 @@
 package application.model.dtos;
 
-import application.model.Dziecko;
+import application.model.Child;
 
 import java.util.Date;
 
@@ -47,10 +47,10 @@ public class DzieckoDTO implements java.io.Serializable{
 
     private boolean status;
 
-    public DzieckoDTO(Dziecko dziecko) {
-        this.dzieckoId = dziecko.getDzieckoId();
-        this.dataUtworzenia = dziecko.getDataUtworzenia();
-        this.haslo=dziecko.getHaslo();
+    public DzieckoDTO(Child dziecko) {
+        this.dzieckoId = dziecko.getChildId();
+        this.dataUtworzenia = dziecko.getCreationDate();
+        this.haslo=dziecko.getPassword();
         this.status=dziecko.isStatus();
     }
 }

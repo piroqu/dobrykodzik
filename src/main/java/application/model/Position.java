@@ -1,6 +1,8 @@
 package application.model;
 // Generated 2015-11-30 22:04:58 by Hibernate Tools 4.3.1.Final
 
+import application.model.dtos.mobile.request.child.PositionMDTORequest;
+
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,6 +37,13 @@ public class Position implements java.io.Serializable {
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.creationDate = creationDate;
+	}
+
+	public Position(Child child, PositionMDTORequest request) {
+		this.child = child;
+		this.longitude = request.getLongitude();
+		this.latitude=request.getLatitude();
+		this.creationDate = request.getCreationDate();
 	}
 
 	@Id

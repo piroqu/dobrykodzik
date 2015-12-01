@@ -1,11 +1,15 @@
 package application.model;
-// Generated 2015-11-30 22:04:58 by Hibernate Tools 4.3.1.Final
+// Generated 2015-11-30 22:30:56 by Hibernate Tools 4.3.1.Final
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -17,12 +21,18 @@ public class Task implements java.io.Serializable {
 
 	private Integer taskId;
 	private String name;
+	private Set<Queue> queues = new HashSet<Queue>(0);
 
 	public Task() {
 	}
 
 	public Task(String name) {
 		this.name = name;
+	}
+
+	public Task(String name, Set<Queue> queues) {
+		this.name = name;
+		this.queues = queues;
 	}
 
 	@Id
@@ -44,6 +54,15 @@ public class Task implements java.io.Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "task")
+	public Set<Queue> getQueues() {
+		return this.queues;
+	}
+
+	public void setQueues(Set<Queue> queues) {
+		this.queues = queues;
 	}
 
 }

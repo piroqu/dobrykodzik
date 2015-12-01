@@ -1,7 +1,6 @@
 package application.model.dtos.mobile.response;
 
-import application.model.Kolejka;
-import application.model.TypZadanie;
+import application.model.Queue;
 
 import java.io.Serializable;
 
@@ -14,9 +13,9 @@ public class KolejkaRodzicMDTOResponse implements Serializable{
     private Integer dzieckodzieckoId;
 
 
-    public KolejkaRodzicMDTOResponse(Kolejka kolejka) {
-        this.typZadanie = kolejka.getTypZadanie().getNazwa();
-        this.dzieckodzieckoId = kolejka.getDziecko().getDzieckoId();
+    public KolejkaRodzicMDTOResponse(Queue queue) {
+        this.typZadanie = queue.getTask().getName();
+        this.dzieckodzieckoId = queue.getChild().getChildId();
     }
 
     public String getTypZadanie() {

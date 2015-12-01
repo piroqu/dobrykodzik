@@ -1,6 +1,7 @@
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -11,12 +12,9 @@ public class Test {
     public static void main(String ... args){
         String dateAsString= "2015-11-28T17:20:05.977+0100";
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        Date date = new Date();
-        try {
-            date = dateFormat.parse(dateAsString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        System.out.println(date.toString());
+        Date today = Calendar.getInstance().getTime();
+        String reportDate = dateFormat.format(today);
+
+        System.out.println(reportDate);
     }
 }

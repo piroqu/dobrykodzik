@@ -1,13 +1,10 @@
 package application.rest;
 
-import application.helper.DateParser;
 import application.model.*;
-import application.model.dtos.mobile.request.DzieckoMDTORequest;
-import application.model.dtos.mobile.request.PozycjaMDTO;
-import application.model.dtos.mobile.response.DzieckoMDTOResponse;
+import application.model.dtos.mobile.request.child.PositionMDTORequest;
+import application.model.dtos.mobile.response.child.PositionMDTOResponse;
 import application.service.*;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -15,9 +12,7 @@ import javax.ws.rs.*;
 import javax.validation.Validator;
 import javax.ws.rs.core.MediaType;
 
-/**
- * Created by PiroACC on 2015-11-24.
- */
+
 // The Java class will be hosted at the URI path "/helloworld"
 @Path("/child")
 public class ChildResourcesRESTService {
@@ -37,7 +32,6 @@ public class ChildResourcesRESTService {
     @Inject
     private ParentHome parentHome;
 
-
     @Inject
     private Task taskHome;
 
@@ -51,6 +45,19 @@ public class ChildResourcesRESTService {
     @Produces("text/plain")
     public String getClichedMessage() {
         return "Hello World";
+    }
+
+    @POST
+    @Path("/send/position/{childId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public PositionMDTOResponse synchronize(@PathParam("childId") Integer childId, PositionMDTORequest request) {
+        PositionMDTOResponse response = new PositionMDTOResponse();
+        Child child = childHome.findById(childId);
+        Position positionToInsert = new Position(child, request);
+        positionHome.persist(positionToInsert);
+        response.setStatus("synchronized");
+        return response;
     }
 
 /*    @POST
@@ -70,7 +77,8 @@ public class ChildResourcesRESTService {
         log.info("Child connect with parent task added : " +taskQueue);
     }*/
 
-  /*  public Kolejka createTaskAskParentToConnection(Rodzic rodzic,Dziecko child) {
+
+ /* public Kolejka createTaskAskParentToConnection(Rodzic rodzic,Dziecko child) {
         Kolejka taskQueue = new Kolejka();
         Integer dodajDzieckoTaskId = 1;
         TypZadanie typZadanie = taskHome.findById(dodajDzieckoTaskId);
@@ -82,7 +90,8 @@ public class ChildResourcesRESTService {
         return taskQueue;
     }*/
 
-    @POST
+
+/*    @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -94,7 +103,7 @@ public class ChildResourcesRESTService {
         DzieckoMDTOResponse dzieckoMDTOResponse = new DzieckoMDTOResponse();
         dzieckoMDTOResponse.setDzieckoId(generatedID);
         return dzieckoMDTOResponse;
-    }
+    }*/
 /*    @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -116,7 +125,8 @@ public class ChildResourcesRESTService {
         return builder.build();
     }*/
 
-    @POST
+
+/*    @POST
     @Path("/synchronize/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -131,5 +141,5 @@ public class ChildResourcesRESTService {
             tempPozycjaMDTO.setCzyZsynchronizowano(true);
         }
         return positionsToSync;
-    }
+    }*/
 }

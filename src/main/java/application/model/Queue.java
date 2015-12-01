@@ -1,5 +1,5 @@
 package application.model;
-// Generated 2015-11-30 22:04:58 by Hibernate Tools 4.3.1.Final
+// Generated 2015-11-30 22:30:56 by Hibernate Tools 4.3.1.Final
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -24,6 +24,7 @@ public class Queue implements java.io.Serializable {
 	private Integer queueId;
 	private Child child;
 	private Parent parent;
+	private Task task;
 	private int priority;
 	private boolean status;
 	private byte[] dane;
@@ -32,17 +33,19 @@ public class Queue implements java.io.Serializable {
 	public Queue() {
 	}
 
-	public Queue(Child child, Parent parent, int priority, boolean status, Date creationDate) {
+	public Queue(Child child, Parent parent, Task task, int priority, boolean status, Date creationDate) {
 		this.child = child;
 		this.parent = parent;
+		this.task = task;
 		this.priority = priority;
 		this.status = status;
 		this.creationDate = creationDate;
 	}
 
-	public Queue(Child child, Parent parent, int priority, boolean status, byte[] dane, Date creationDate) {
+	public Queue(Child child, Parent parent, Task task, int priority, boolean status, byte[] dane, Date creationDate) {
 		this.child = child;
 		this.parent = parent;
+		this.task = task;
 		this.priority = priority;
 		this.status = status;
 		this.dane = dane;
@@ -79,6 +82,16 @@ public class Queue implements java.io.Serializable {
 
 	public void setParent(Parent parent) {
 		this.parent = parent;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "fk_task_id", nullable = false)
+	public Task getTask() {
+		return this.task;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
 	}
 
 	@Column(name = "priority", nullable = false)

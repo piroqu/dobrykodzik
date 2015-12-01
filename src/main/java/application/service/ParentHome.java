@@ -4,6 +4,9 @@ package application.service;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import application.model.Parent;
 import org.apache.commons.logging.Log;
@@ -33,6 +36,19 @@ public class ParentHome {
 		}
 	}
 
+	public Integer persistAndGetId(Parent transientInstance) {
+		log.debug("persisting Rodzic instance");
+		try {
+			entityManager.persist(transientInstance);
+			log.debug("persist successful");
+			entityManager.flush();
+		} catch (RuntimeException re) {
+			log.error("persist failed", re);
+			throw re;
+		}
+		return transientInstance.getParentId();
+	}
+
 	public void remove(Parent persistentInstance) {
 		log.debug("removing Parent instance");
 		try {
@@ -60,6 +76,22 @@ public class ParentHome {
 		log.debug("getting Parent instance with id: " + id);
 		try {
 			Parent instance = entityManager.find(Parent.class, id);
+			log.debug("get successful");
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+
+	public Parent findByEmail(String email) {
+		log.debug("getting Rodzic instance with email: " + email);
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Parent> criteria = cb.createQuery(Parent.class);
+		Root<Parent> member = criteria.from(Parent.class);
+		try {
+			criteria.select(member).where(cb.equal(member.get("email"), email));
+			Parent instance =entityManager.createQuery(criteria).getSingleResult();
 			log.debug("get successful");
 			return instance;
 		} catch (RuntimeException re) {

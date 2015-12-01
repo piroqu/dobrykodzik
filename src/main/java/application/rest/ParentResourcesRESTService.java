@@ -1,18 +1,16 @@
 package application.rest;
 
+import application.model.Child;
 import application.model.Parent;
 import application.model.dtos.mobile.request.RodzicMDTORequest;
 import application.model.dtos.mobile.response.KolejkaRodzicMDTOResponse;
 import application.model.dtos.mobile.response.PozycjaMDTOResponse;
 import application.model.dtos.mobile.response.RodzicMDTOResponse;
+import application.model.dtos.mobile.response.UserDataResponse;
 import application.service.ChildHome;
-import application.service.DzieckoHome;
-import application.service.KolejkaHome;
 import application.service.ParentHome;
 import application.service.PositionHome;
-import application.service.PozycjaHome;
 import application.service.QueueHome;
-import application.service.RodzicHome;
 
 import javax.inject.Inject;
 import javax.validation.Validator;
@@ -56,37 +54,18 @@ public class ParentResourcesRESTService {
     }
 
 
-    @GET
-    @Path("/login/{parentEmail}/{parentPassword}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public RodzicMDTORequest getParentData(@PathParam("parentEmail") String parentEmail, @PathParam("parentPassword") String parentPassword){
-        Parent parent = null;
-        RodzicMDTORequest rodzicMDTOResponse=null;
-        try {
-            parent  = parentHome.findByEmail(parentEmail);
-        }catch (RuntimeException re) {
-            log.info("PARENT NOT FOUND");
-        }
-        if(parent.getHaslo().equals(parentPassword)) {
-            rodzicMDTOResponse = new RodzicMDTORequest(parent);
-            return rodzicMDTOResponse;
-        }else{
-            log.info("INCORRECT PASSWORD");
-        }
-        return rodzicMDTOResponse;
-    }
-
+/*
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public RodzicMDTOResponse register(RodzicMDTORequest rodzicMDTORequest) {
         log.info("Parent register recievied: " + rodzicMDTORequest);
-        Rodzic rodzic = new Rodzic(rodzicMDTORequest);
+        Parent parent = new Parent(rodzicMDTORequest);
         RodzicMDTOResponse rodzicMDTOResponse = new RodzicMDTOResponse();   //TODO add QUEUE !!
 //       Kolejka task = createRegisterQueue(rodzicMDTO);
 //        queueHome.persist(task);
-        Integer rodzicId = parentHome.persistAndGetId(rodzic);
+        Integer rodzicId = parentHome.persistAndGetId(parent);
         rodzicMDTOResponse.setParentId(rodzicId);
         log.info("Parent register sends: " + rodzicMDTOResponse);
         return rodzicMDTOResponse;
@@ -128,5 +107,5 @@ public class ParentResourcesRESTService {
             queueHome.merge(tmp);
         }
         return reponse;
-    }
+    }*/
 }

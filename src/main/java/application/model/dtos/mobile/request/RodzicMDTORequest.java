@@ -1,7 +1,8 @@
 package application.model.dtos.mobile.request;
 // Generated 2015-11-23 23:39:49 by Hibernate Tools 4.0.0.Final
 
-import application.model.Rodzic;
+
+import application.model.Parent;
 
 import java.util.Date;
 
@@ -18,14 +19,14 @@ public class RodzicMDTORequest implements java.io.Serializable {
     private String email;
     private String numerTelefonu;
 
-    public RodzicMDTORequest(Rodzic parent) {
-        this.rodzicId = parent.getRodzicId();
-        this.dataUtworzenia = parent.getDataUtworzenia();
-        this.imie = parent.getImie();
-        this.haslo = parent.getHaslo();
+    public RodzicMDTORequest(Parent parent) {
+        this.rodzicId = parent.getParentId();
+        this.dataUtworzenia = parent.getCreationDate();
+        this.imie = parent.getName();
+        this.haslo = parent.getPassword();
         this.status = parent.isStatus();
         this.email = parent.getEmail();
-        this.numerTelefonu = parent.getNumerTelefonu();
+        this.numerTelefonu = parent.getPhoneNumber();
     }
 
     public void setImie(String imie) {
