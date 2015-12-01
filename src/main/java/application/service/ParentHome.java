@@ -104,6 +104,7 @@ public class ParentHome {
 		try {
 			criteria.select(member).where(cb.equal(member.get("email"), email));
 			Parent instance =entityManager.createQuery(criteria).getSingleResult();
+			instance.getChilds().size();
 			log.debug("get successful");
 			return instance;
 		} catch (RuntimeException re) {

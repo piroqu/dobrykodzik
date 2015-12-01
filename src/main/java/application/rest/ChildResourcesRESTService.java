@@ -1,10 +1,12 @@
 package application.rest;
 
 import application.model.*;
+import application.model.dtos.mobile.request.child.ConnectionMDTOResponse;
 import application.model.dtos.mobile.request.child.PositionMDTORequest;
 import application.model.dtos.mobile.response.child.PositionMDTOResponse;
 import application.service.*;
 
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -60,22 +62,29 @@ public class ChildResourcesRESTService {
         return response;
     }
 
-/*    @POST
-    @Path("/connect/{parentId}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @POST
+    @Path("/connect/{childId}/{parentEmail}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void connectWithParent(DzieckoMDTORequest dzieckoMDTORequest,
-                                  @PathParam("parentId") Integer parentId) {
-        Integer childId = dzieckoMDTORequest.getDzieckoId();
-        log.info("Child-Parent connect recieved childId : " + childId + " and parentId : ");
-        Child currentChild = childHome.findById(childId);
-        log.info("Child-Parent connect found child:" + currentChild);
-        Parent targetParent = parentHome.findById(parentId);
-        log.info("Child-Parent connect found parent:" + targetParent);
-        Queue taskQueue = createTaskAskParentToConnection(targetParent,currentChild);
-        queueHome.persist(taskQueue);
-        log.info("Child connect with parent task added : " +taskQueue);
-    }*/
+    public ConnectionMDTOResponse connectWithParent(@PathParam("childId") Integer childId, @PathParam("parentEmail") String parentEmail) {
+        ConnectionMDTOResponse response = new ConnectionMDTOResponse();
+        try {
+            log.info("Child-Parent connect recieved childId : " + childId + " and parentId : ");
+            Child child = childHome.findById(childId);
+            log.info("Child-Parent connect found child:" + child);
+            Parent parent = parentHome.findByEmail(parentEmail);
+            log.info("Child-Parent connect found parent:" + parent);
+            Set<Child> childs = parent.getChilds();
+            childs.add(child);
+            parent.setChilds(childs);
+            parentHome.merge(parent);
+            response.setStatus("ok");
+        }catch (RuntimeException re) {
+            log.info("get failed");
+            response.setStatus("failed");
+        }
+        return response;
+    }
+
 
 
  /* public Kolejka createTaskAskParentToConnection(Rodzic rodzic,Dziecko child) {
