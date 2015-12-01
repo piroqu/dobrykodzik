@@ -1,5 +1,7 @@
 package application.rest;
 
+import application.comparator.DateComparator;
+import application.helper.DateParser;
 import application.model.Child;
 import application.model.Parent;
 import application.model.Position;
@@ -54,10 +56,10 @@ public class ParentResourcesRESTService {
     @GET
     @Path("/childrens/{parentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ParentChildMDTOResponse> getChildrens(@PathParam("parentId") Integer parentId){
+    public List<ParentChildMDTOResponse> getChildrens(@PathParam("parentId") Integer parentId) {
         Parent parent = parentHome.findByIdAndGetChildrens(parentId);
-        List<ParentChildMDTOResponse> parentChildrens = new ArrayList<>() ;
-        for(Child tempChild : parent.getChilds()){
+        List<ParentChildMDTOResponse> parentChildrens = new ArrayList<>();
+        for (Child tempChild : parent.getChilds()) {
             ParentChildMDTOResponse tempParentChildren = new ParentChildMDTOResponse(tempChild);
             parentChildrens.add(tempParentChildren);
         }
@@ -67,13 +69,35 @@ public class ParentResourcesRESTService {
     @GET
     @Path("/position/{childrenId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PositionForParentMDTOResponse> getChildrenPositions(@PathParam("childrenId") Integer childrenId){
+    public List<PositionForParentMDTOResponse> getChildrenPositions(@PathParam("childrenId") Integer childrenId) {
         Child child = childHome.findByIdAndInitializePositions(childrenId);
-        List<PositionForParentMDTOResponse> response=new ArrayList<>() ;
-        for(Position tempPosition :child.getPositions()){
+        List<PositionForParentMDTOResponse> response = new ArrayList<>();
+        for (Position tempPosition : child.getPositions()) {
             PositionForParentMDTOResponse tempResponseObj = new PositionForParentMDTOResponse(tempPosition);
             response.add(tempResponseObj);
         }
+        Collections.sort(response,new DateComparator());
+        return response;
+    }
+
+    @GET
+    @Path("/position/{childrenId}/{from}/{to}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PositionForParentMDTOResponse> getChildrenPositions(@PathParam("childrenId") Integer childrenId,
+                                                                    @PathParam("from") String from, @PathParam("to") String to) {
+        Child child = childHome.findByIdAndInitializePositions(childrenId);
+        String targetDateFormat = "yyyy-MM-dd HH:mm:ss";
+        Date fromDate = DateParser.parseStringToDate(from,targetDateFormat);
+        Date toDate = DateParser.parseStringToDate(to,targetDateFormat);
+
+        List<PositionForParentMDTOResponse> response = new ArrayList<>();
+        for (Position tempPosition : child.getPositions()) {
+            if (tempPosition.getCreationDate().after(fromDate) && tempPosition.getCreationDate().before(toDate)) {
+                PositionForParentMDTOResponse tempResponseObj = new PositionForParentMDTOResponse(tempPosition);
+                response.add(tempResponseObj);
+            }
+        }
+        Collections.sort(response,new DateComparator());
         return response;
     }
 /*

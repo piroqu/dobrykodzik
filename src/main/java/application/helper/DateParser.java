@@ -42,6 +42,17 @@ public class DateParser {
         return date;
     }
 
+    public static Date parseStringToDate(String dateAsString,String targetFormat){
+        DateFormat dateFormat = new SimpleDateFormat(targetFormat);
+        Date date = new Date();
+        try {
+            date = dateFormat.parse(dateAsString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     public static String parseDateToString(Date date){
         DateFormat dateFormat = new SimpleDateFormat(DATE_FROMAT);
         String reportDate = dateFormat.format(date);

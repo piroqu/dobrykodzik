@@ -9,12 +9,16 @@ import java.util.Date;
  */
 public class Test {
 
-    public static void main(String ... args){
-        String dateAsString= "2015-11-28T17:20:05.977+0100";
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        Date today = Calendar.getInstance().getTime();
-        String reportDate = dateFormat.format(today);
+    public static void main(String... args) {
+        String dateAsString = "2015-12-01T21:45:23.000+0100";
+        SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        System.out.println(reportDate);
+        try {
+            String reformattedStr = myFormat.format(fromUser.parse(dateAsString));
+            System.out.println(reformattedStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
