@@ -83,6 +83,18 @@ public class ParentHome {
 			throw re;
 		}
 	}
+	public Parent findByIdAndGetChildrens(Integer id) {
+		log.debug("getting Parent instance with id: " + id);
+		try {
+			Parent instance = entityManager.find(Parent.class, id);
+			instance.getChilds().size();
+			log.debug("get successful");
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
 
 	public Parent findByEmail(String email) {
 		log.debug("getting Rodzic instance with email: " + email);

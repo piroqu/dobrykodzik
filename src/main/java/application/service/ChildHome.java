@@ -85,6 +85,19 @@ public class ChildHome {
 		}
 	}
 
+	public Child findByIdAndInitializePositions(Integer id) {
+		log.debug("getting Child instance with id: " + id);
+		try {
+			Child instance = entityManager.find(Child.class, id);
+			instance.getPositions().size();
+			log.debug("get successful");
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+
 	public Child findByEmail(String email) {
 		log.debug("getting Child instance with email: " + email);
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();

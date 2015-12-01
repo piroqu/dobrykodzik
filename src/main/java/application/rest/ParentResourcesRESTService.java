@@ -2,11 +2,9 @@ package application.rest;
 
 import application.model.Child;
 import application.model.Parent;
-import application.model.dtos.mobile.request.RodzicMDTORequest;
-import application.model.dtos.mobile.response.KolejkaRodzicMDTOResponse;
-import application.model.dtos.mobile.response.PozycjaMDTOResponse;
-import application.model.dtos.mobile.response.RodzicMDTOResponse;
-import application.model.dtos.mobile.response.UserDataResponse;
+import application.model.Position;
+import application.model.dtos.mobile.response.parent.ParentChildMDTOResponse;
+import application.model.dtos.mobile.response.parent.PositionForParentMDTOResponse;
 import application.service.ChildHome;
 import application.service.ParentHome;
 import application.service.PositionHome;
@@ -53,7 +51,31 @@ public class ParentResourcesRESTService {
         return "Brawa " + param;
     }
 
+    @GET
+    @Path("/childrens/{parentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ParentChildMDTOResponse> getChildrens(@PathParam("parentId") Integer parentId){
+        Parent parent = parentHome.findByIdAndGetChildrens(parentId);
+        List<ParentChildMDTOResponse> parentChildrens = new ArrayList<>() ;
+        for(Child tempChild : parent.getChilds()){
+            ParentChildMDTOResponse tempParentChildren = new ParentChildMDTOResponse(tempChild);
+            parentChildrens.add(tempParentChildren);
+        }
+        return parentChildrens;
+    }
 
+    @GET
+    @Path("/position/{childrenId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PositionForParentMDTOResponse> getChildrenPositions(@PathParam("childrenId") Integer childrenId){
+        Child child = childHome.findByIdAndInitializePositions(childrenId);
+        List<PositionForParentMDTOResponse> response=new ArrayList<>() ;
+        for(Position tempPosition :child.getPositions()){
+            PositionForParentMDTOResponse tempResponseObj = new PositionForParentMDTOResponse(tempPosition);
+            response.add(tempResponseObj);
+        }
+        return response;
+    }
 /*
     @POST
     @Path("/register")
