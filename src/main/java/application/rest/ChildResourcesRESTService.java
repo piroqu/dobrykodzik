@@ -74,6 +74,13 @@ public class ChildResourcesRESTService {
             Parent parent = parentHome.findByEmail(parentEmail);
             log.info("Child-Parent connect found parent:" + parent);
             Set<Child> childs = parent.getChilds();
+            for(Child temp :childs){
+                if(temp.getChildId().equals(child.getChildId())){
+                    response.setStatus("relation exists");
+                    return response;
+                }
+            }
+
             childs.add(child);
             parent.setChilds(childs);
             parentHome.merge(parent);

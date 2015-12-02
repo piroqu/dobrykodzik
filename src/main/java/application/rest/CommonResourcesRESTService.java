@@ -42,10 +42,10 @@ public class CommonResourcesRESTService {
     @POST
     @Path("/register/{userEmail}/{userPassword}/{name}/{phoneNumber}/{role}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registration(@PathParam("userEmail") String userEmail, @PathParam("userPassword") String userPassword,
+    public UserDataResponse registration(@PathParam("userEmail") String userEmail, @PathParam("userPassword") String userPassword,
     @PathParam("name") String name,@PathParam("phoneNumber") String phoneNumber, @PathParam("role") String role){
         role=role.toLowerCase();
-        Response.ResponseBuilder builder = null;
+        UserDataResponse userData = new UserDataResponse();
         if(role.equals("parent")){
             Parent parent = new Parent();
             parent.setEmail(userEmail);
@@ -54,8 +54,8 @@ public class CommonResourcesRESTService {
             parent.setPhoneNumber(phoneNumber);
             parent.setStatus(true);
             parent.setCreationDate(DateParser.getCurrentParsedDate());
-            parentHome.persist(parent);
-            builder = Response.ok();
+            parent.setParentId(parentHome.persistAndGetId(parent));
+            userData = new UserDataResponse(parent);
         }else if(role.equals("child")){
             Child child = new Child();
             child.setEmail(userEmail);
@@ -64,12 +64,12 @@ public class CommonResourcesRESTService {
             child.setPhoneNumber(phoneNumber);
             child.setStatus(true);
             child.setCreationDate(DateParser.getCurrentParsedDate());
-            childHome.persist(child);
-            builder = Response.ok();
-        }else{
-            builder = Response.status(Response.Status.CONFLICT);
+            child.setChildId(childHome.persistAndGetId(child));
+            userData = new UserDataResponse(child);
+        }else {
+            userData.setRole("wrong");
         }
-        return builder.build();
+        return userData;
     }
 
     @GET
